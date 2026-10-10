@@ -334,6 +334,14 @@
 .history-collapse:not(.open)::after{background:linear-gradient(to bottom,rgba(255,240,244,0),var(--mx-blush));}
 .history-toggle{color:var(--ink);}
 @media(max-width:860px){.hero-deco::before{width:340px;height:340px;right:50%;top:auto;bottom:40px;transform:translateX(50%);box-shadow:0 0 0 30px rgba(255,255,255,.14);}}
+
+/* Все четыре бутылки одного размера */
+.hero-float-stage .float-bottle{width:25%;max-width:none;display:flex;justify-content:center;}
+.hero-float-stage .float-bottle img{height:100%;width:auto;max-width:none;}
+.float-bottle.fb-1{left:0%;}.float-bottle.fb-2{left:25%;}.float-bottle.fb-3{left:50%;}.float-bottle.fb-4{left:75%;}
+.float-bottle,.float-bottle.fb-1,.float-bottle.fb-2,.float-bottle.fb-3,.float-bottle.fb-4{height:78%;bottom:4%;}
+@media(max-width:860px){.float-bottle,.float-bottle.fb-1,.float-bottle.fb-2,.float-bottle.fb-3,.float-bottle.fb-4{height:66%;}}
+@media(max-width:480px){.float-bottle,.float-bottle.fb-1,.float-bottle.fb-2,.float-bottle.fb-3,.float-bottle.fb-4{height:60%;}}
 </style>
 </head>
 <body>
@@ -439,7 +447,6 @@
     </div>
     <div class="modal-body-grid">
       <div>
-        <div class="demo-note">Пример текста для вкуса «Груша» — для остальных вкусов текст предоставит клиент</div>
         <div id="modalPaneProduct">
           <p>Вкус, который сочетает в себе сладость и сочность зрелой груши. Мягкий, сладкий и фруктовый аромат с тонкими нотками свежести.</p>
           <p>Это традиционный и ароматный вкус, который отражает богатство и разнообразие кавказских фруктов.</p>
@@ -624,7 +631,37 @@ const modalOverlay = document.getElementById('modalOverlay');
 const modalTitle = document.getElementById('modalTitle');
 const modalPhotoImg = document.getElementById('modalPhotoImg');
 
+
+const FLAVOR_TEXT = {
+  "Тархун": {
+    about: ["Классический вкус лимонада с узнаваемой пряной свежестью эстрагона. Травяной, яркий и бодрящий, с мягкой сладостью натурального сахара.",
+            "Вкус, знакомый с детства: тархун — настоящая классика кавказских лимонадов."],
+    flav: "Тархун"
+  },
+  "Груша": {
+    about: ["Вкус, который сочетает в себе сладость и сочность зрелой груши. Мягкий, сладкий и фруктовый аромат с тонкими нотками свежести.",
+            "Это традиционный и ароматный вкус, который отражает богатство и разнообразие кавказских фруктов."],
+    flav: "Груша"
+  },
+  "Черника": {
+    about: ["Насыщенный вкус спелой черники с лёгкой кислинкой. Глубокий, сочный и чуть терпкий ягодный аромат.",
+            "Черника добавляет линейке «Курджипс» современный ягодный акцент — для тех, кто любит выразительные вкусы."],
+    flav: "Черника"
+  },
+  "Лимон": {
+    about: ["Свежий цитрусовый вкус спелого лимона: приятная кислинка и мягкая сладость натурального сахара в балансе.",
+            "Универсальный и освежающий вкус, который хорошо подходит к еде и в любую погоду."],
+    flav: "Лимон"
+  }
+};
+function fillFlavorText(flavor){
+  const t = FLAVOR_TEXT[flavor]; if(!t) return;
+  document.getElementById('modalPaneProduct').innerHTML = t.about.map(x=>'<p>'+x+'</p>').join('');
+  document.getElementById('modalPaneComposition').innerHTML =
+    '<p>Вода питьевая, сахар, регулятор кислотности — лимонная кислота, натуральный ароматизатор «'+t.flav+'», консерванты (сорбат калия, бензоат натрия), краситель.</p>';
+}
 function openModal(flavor){
+  fillFlavorText(flavor);
   modalTitle.textContent = flavor;
   document.querySelector('.modal-box').dataset.flavor = flavor;
   modalPhotoImg.src = flavorPhotos[flavor].p15;
